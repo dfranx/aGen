@@ -43,7 +43,8 @@ namespace ag
 		NewArray,
 		Call,
 		CallReturn,
-		IsTypeOf
+		IsTypeOf,
+		If
 	};
 }
 

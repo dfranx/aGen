@@ -16,6 +16,7 @@ namespace ag
 		m_code.push_back(ByteCode());
 		m_names.push_back(name);
 		m_ret.push_back(ret);
+		m_ifAddr.resize(m_ifAddr.size() + 1);
 		m_locals.push_back(0);
 		m_args.resize(id + 1);
 		m_args[id] = args;
@@ -45,12 +46,19 @@ namespace ag
 		size_t i = 0;
 		for (; i < m_names.size(); i++)
 			if (m_names[i] == name) break;
-
+		
 		m_code[i].Write(m_lengthAddr[i],
 			BitConverter::Get(
 				m_code[i].Count() - (m_lengthAddr[i] + sizeof(uint32_t))
 			)
 		);
+
+		for (size_t j = 0; j < m_ifAddr[i].size(); j++)
+			m_code[i].Write(m_ifAddr[i][j].first,
+				BitConverter::Get(
+					m_ifAddr[i][j].second - (m_lengthAddr[i] + sizeof(uint32_t))
+				)
+			);
 
 		return m_code[i];
 	}
@@ -228,6 +236,22 @@ namespace ag
 	{
 		m_code[m_cur].Add(OpCode::IsTypeOf);
 		m_code[m_cur].Add(type);
+	}
+	size_t& FunctionManager::If()
+	{
+		m_code[m_cur].Add(OpCode::If);
+		
+		size_t cur_if = m_ifAddr[m_cur].size();
+		m_ifAddr[m_cur].resize(cur_if + 1);
+		m_ifAddr[m_cur][cur_if] = std::make_pair(m_code[m_cur].Count(), 0);
+
+		m_code[m_cur].Add(BitConverter::Get(0u));
+
+		return m_ifAddr[m_cur][cur_if].second;
+	}
+	void FunctionManager::GetCurrentAddress(size_t& adr)
+	{
+		adr = m_code[m_cur].Count();
 	}
 	uint16_t FunctionManager::GetNextLocal()
 	{
