@@ -212,15 +212,17 @@ namespace ag
 		m_code[m_cur].Add(OpCode::NewArray);
 		m_code[m_cur].Add(dim);
 	}
-	void FunctionManager::Call(std::string name)
+	void FunctionManager::Call(std::string name, uint8_t argc)
 	{
 		m_code[m_cur].Add(OpCode::Call);
 		m_code[m_cur].Add(BitConverter::Get(name, true));
+		m_code[m_cur].Add(argc);
 	}
-	void FunctionManager::CallReturn(std::string name)
+	void FunctionManager::CallReturn(std::string name, uint8_t argc)
 	{
 		m_code[m_cur].Add(OpCode::CallReturn);
 		m_code[m_cur].Add(BitConverter::Get(name, true));
+		m_code[m_cur].Add(argc);
 	}
 	uint16_t FunctionManager::GetNextLocal()
 	{

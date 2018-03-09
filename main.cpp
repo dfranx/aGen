@@ -14,7 +14,9 @@ int main() {
 	gen.Function.SetCurrent("main");
 		gen.Function.PushStack(2);				// 2
 		gen.Function.PushStack(10);				// 10 2
-		gen.Function.CallReturn("multiply");	// multiply(10, 2)
+		gen.Function.CallReturn("multiply", 2);	// multiply(10, 2)
+		gen.Function.Duplicate();
+		gen.Function.Call("print", 1);
 		gen.Function.Return();					// return multiply(10, 2)
 
 	gen.Function.SetCurrent("multiply");

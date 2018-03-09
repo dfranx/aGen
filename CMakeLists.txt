@@ -7,7 +7,6 @@ include_directories(${PROJECT_SOURCE_DIR}/inc)
 
 add_executable(aGen 
 	main.cpp
-	src/ByteCode.cpp
 	src/Generator.cpp
 	src/BitConverter.cpp
 	src/FunctionManager.cpp
