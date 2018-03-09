@@ -56,6 +56,7 @@ namespace ag
 		void NewArray(uint8_t dim);
 		void Call(std::string name, uint8_t argc);
 		void CallReturn(std::string name, uint8_t argc);
+		void IsTypeOf(ag::Type type);
 
 		uint16_t GetNextLocal();
 

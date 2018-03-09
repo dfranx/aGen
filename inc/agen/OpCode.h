@@ -42,7 +42,8 @@ namespace ag
 		SetGlobal,
 		NewArray,
 		Call,
-		CallReturn
+		CallReturn,
+		IsTypeOf
 	};
 }
 

@@ -16,6 +16,7 @@ int main() {
 		gen.Function.PushStack(10);				// 10 2
 		gen.Function.CallReturn("multiply", 2);	// multiply(10, 2)
 		gen.Function.Duplicate();
+		gen.Function.IsTypeOf(ag::Type::String);
 		gen.Function.Call("print", 1);
 		gen.Function.Return();					// return multiply(10, 2)
 

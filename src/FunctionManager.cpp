@@ -224,6 +224,11 @@ namespace ag
 		m_code[m_cur].Add(BitConverter::Get(name, true));
 		m_code[m_cur].Add(argc);
 	}
+	void FunctionManager::IsTypeOf(ag::Type type)
+	{
+		m_code[m_cur].Add(OpCode::IsTypeOf);
+		m_code[m_cur].Add(type);
+	}
 	uint16_t FunctionManager::GetNextLocal()
 	{
 		return m_locals[m_cur] + 1 + (uint16_t)m_args.size();
