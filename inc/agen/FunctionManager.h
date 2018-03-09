@@ -58,6 +58,7 @@ namespace ag
 		void CallReturn(std::string name, uint8_t argc);
 		void IsTypeOf(ag::Type type);
 		size_t& If();
+		size_t& Goto();
 
 		void GetCurrentAddress(size_t& adr);
 		uint16_t GetNextLocal();
@@ -66,7 +67,7 @@ namespace ag
 		size_t m_cur;
 		std::vector<uint16_t> m_locals;
 		std::vector<size_t> m_lengthAddr;
-		std::vector<std::vector<std::pair<size_t,size_t>>> m_ifAddr;
+		std::vector<std::vector<std::pair<size_t,size_t>>> m_linkAddr;
 		std::vector<ByteCode> m_code;
 		std::vector<std::string> m_names;
 		std::vector<ag::Type> m_ret;

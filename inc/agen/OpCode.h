@@ -44,7 +44,8 @@ namespace ag
 		Call,
 		CallReturn,
 		IsTypeOf,
-		If
+		If,
+		Goto
 	};
 }
 

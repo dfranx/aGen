@@ -15,9 +15,7 @@ int main() {
 		gen.Function.PushStack(2);				// 2
 		gen.Function.PushStack(10);				// 10 2
 		gen.Function.CallReturn("multiply", 2);	// multiply(10, 2)
-		gen.Function.Duplicate();				// 20 20
-		gen.Function.IsTypeOf(ag::Type::Int);	// 1 20
-		size_t& if1 = gen.Function.If();
+		size_t& if1 = gen.Function.Goto();
 			gen.Function.PushStack("typeof(multiply()) == int");
 			gen.Function.Call("print", 1);
 		gen.Function.GetCurrentAddress(if1);
@@ -31,7 +29,7 @@ int main() {
 
 	ag::ByteCode bc = gen.Get();// get bytecode
 
-	std::ofstream file("test.bv", std::ios::out | std::ios::binary);
+	std::ofstream file("E:/agen/test.bv", std::ios::out | std::ios::binary);
 	file.write(reinterpret_cast<const char *>(bc.Get().data()), bc.Count());
 
 	std::cout << "[end]" << std::endl;
