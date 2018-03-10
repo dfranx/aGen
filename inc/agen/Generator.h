@@ -16,6 +16,9 @@ namespace ag
 		void SetHeader(uint8_t major, uint16_t minor);
 		size_t AddGlobal(std::string name);
 		size_t AddConstant(variant i);
+		size_t AddObject(std::string name);
+		void AddProperty(std::string obj, std::string prop);
+		void AddMethod(std::string obj, std::string name, ag::Type type, std::vector<ag::Type> args);
 
 		FunctionManager Function;
 
@@ -25,6 +28,9 @@ namespace ag
 		uint8_t m_ver_major;
 		uint16_t m_ver_minor;
 		std::vector<std::string> m_globals;
+		std::vector<std::string> m_objNames;
+		std::vector<std::vector<std::string>> m_objProps;
+		std::vector<std::vector<FunctionData>> m_objMethods;
 		std::vector<variant> m_consts;
 	};
 }

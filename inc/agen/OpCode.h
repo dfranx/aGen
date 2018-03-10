@@ -45,7 +45,14 @@ namespace ag
 		CallReturn,
 		IsTypeOf,
 		If,
-		Goto
+		Goto,
+		NewObject,
+		SetProperty,
+		SetMyProperty,
+		GetProperty,
+		GetMyProperty,
+		CallMethod,
+		CallMyMethod,
 	};
 }
 

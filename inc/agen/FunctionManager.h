@@ -1,5 +1,6 @@
 #ifndef __AGEN_FUNCTION_MANAGER_H__
 #define __AGEN_FUNCTION_MANAGER_H__
+#include <agen/FunctionData.h>
 #include <agen/ByteCode.h>
 #include <agen/Type.h>
 #include <vector>
@@ -15,7 +16,7 @@ namespace ag
 		size_t Create(std::string str, ag::Type ret, std::vector<ag::Type> args);
 		void SetCurrent(std::string name);
 		ByteCode Get(std::string name);
-		inline std::vector<std::string> GetNames() { return m_names; }
+		inline std::vector<FunctionData> GetData() { return m_funcs; }
 
 		// OpCodes
 		void Return();
@@ -69,9 +70,7 @@ namespace ag
 		std::vector<size_t> m_lengthAddr;
 		std::vector<std::vector<std::pair<size_t,size_t>>> m_linkAddr;
 		std::vector<ByteCode> m_code;
-		std::vector<std::string> m_names;
-		std::vector<ag::Type> m_ret;
-		std::vector<std::vector<ag::Type>> m_args;
+		std::vector<FunctionData> m_funcs;
 	};
 }
 

@@ -14,13 +14,10 @@ namespace ag
 		size_t id = m_code.size();
 
 		m_code.push_back(ByteCode());
-		m_names.push_back(name);
-		m_ret.push_back(ret);
+		m_funcs.push_back(FunctionData(name, ret, args));
 		m_linkAddr.resize(m_linkAddr.size() + 1);
 		m_locals.push_back(0);
-		m_args.resize(id + 1);
-		m_args[id] = args;
-
+		
 		m_code[id].Add(OpCode::FunctionStart);
 		m_code[id].Add(ret);
 		m_code[id].Add((uint8_t)args.size());
@@ -34,8 +31,8 @@ namespace ag
 		return id;
 	}
 	void FunctionManager::SetCurrent(std::string n) {
-		for (size_t i = 0; i < m_names.size(); i++)
-			if (m_names[i] == n) {
+		for (size_t i = 0; i < m_funcs.size(); i++)
+			if (m_funcs[i].Name == n) {
 				m_cur = i;
 				break;
 			}
@@ -44,8 +41,8 @@ namespace ag
 	ByteCode FunctionManager::Get(std::string name)
 	{
 		size_t i = 0;
-		for (; i < m_names.size(); i++)
-			if (m_names[i] == name) break;
+		for (; i < m_funcs.size(); i++)
+			if (m_funcs[i].Name == name) break;
 		
 		m_code[i].Write(m_lengthAddr[i],
 			BitConverter::Get(
@@ -196,14 +193,14 @@ namespace ag
 	void FunctionManager::GetLocal(uint16_t loc_id)
 	{
 		m_code[m_cur].Add(OpCode::GetLocal);
-		m_code[m_cur].Add(BitConverter::Get(loc_id + (uint16_t)m_args.size()));
+		m_code[m_cur].Add(BitConverter::Get(loc_id + (uint16_t)m_funcs[m_cur].Arguments.size()));
 	}
 	void FunctionManager::SetLocal(uint16_t loc_id)
 	{
 		m_locals[m_cur] = std::max(m_locals[m_cur], loc_id);
 
 		m_code[m_cur].Add(OpCode::SetLocal);
-		m_code[m_cur].Add(BitConverter::Get(loc_id + (uint16_t)m_args.size()));
+		m_code[m_cur].Add(BitConverter::Get(loc_id + (uint16_t)m_funcs[m_cur].Arguments.size()));
 	}
 	void FunctionManager::GetGlobal(uint16_t glob_id)
 	{
@@ -267,6 +264,6 @@ namespace ag
 	}
 	uint16_t FunctionManager::GetNextLocal()
 	{
-		return m_locals[m_cur] + 1 + (uint16_t)m_args.size();
+		return m_locals[m_cur] + 1 + (uint16_t)m_funcs[m_cur].Arguments.size();
 	}
 }
