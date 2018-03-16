@@ -8,14 +8,16 @@
 
 namespace ag
 {
+	class Generator;
 	class FunctionManager
 	{
 	public:
-		FunctionManager();
+		FunctionManager(Generator& gen);
 		
 		size_t Create(std::string str, ag::Type ret, std::vector<ag::Type> args);
 		void SetCurrent(std::string name);
-		ByteCode Get(std::string name);
+		void SetCurrent(std::string obj, std::string name);
+		ByteCode Get(std::string name, std::string obj = "");
 		inline std::vector<FunctionData> GetData() { return m_funcs; }
 
 		// OpCodes
@@ -61,6 +63,12 @@ namespace ag
 		void NewObject(uint16_t object_id);
 		void GetProperty(uint16_t loc_id, std::string prop);
 		void SetProperty(uint16_t loc_id, std::string prop);
+		void GetMyProperty(std::string prop);
+		void SetMyProperty(std::string prop);
+		void CallMethod(std::string mtd, uint8_t argc);
+		void CallMyMethod(std::string mtd, uint8_t argc);
+		void CallReturnMethod(std::string mtd, uint8_t argc);
+		void CallMyReturnMethod(std::string mtd, uint8_t argc);
 		size_t& If();
 		size_t& Goto();
 
@@ -68,6 +76,7 @@ namespace ag
 		uint16_t GetNextLocal();
 
 	private:
+		Generator& m_gen;
 		size_t m_cur;
 		std::vector<uint16_t> m_locals;
 		std::vector<size_t> m_lengthAddr;

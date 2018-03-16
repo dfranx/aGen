@@ -9,9 +9,11 @@ namespace ag
 	class FunctionData
 	{
 	public:
-		FunctionData() : Name(""), Return(ag::Type::Void) {}
-		FunctionData(std::string n, ag::Type ret, std::vector<ag::Type> args) : Name(n), Return(ret), Arguments(args) { }
+		FunctionData() : Object(""), Name(""), Return(ag::Type::Void) {}
+		FunctionData(std::string n, ag::Type ret, std::vector<ag::Type> args) : Object(""), Name(n), Return(ret), Arguments(args) { }
+		FunctionData(std::string obj, std::string n, ag::Type ret, std::vector<ag::Type> args) : Object(obj), Name(n), Return(ret), Arguments(args) { }
 
+		std::string Object;
 		std::string Name;
 		ag::Type Return;
 		std::vector<ag::Type> Arguments;

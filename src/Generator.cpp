@@ -1,11 +1,11 @@
 #include <agen/Generator.h>
-#include <agen/FunctionManager.h>
 
 namespace ag
 {
 	Generator::Generator() :
 		m_ver_major(0),
-		m_ver_minor(1)
+		m_ver_minor(1),
+		Function(*this)
 	{
 	}
 	void Generator::SetHeader(uint8_t major, uint16_t minor)
@@ -48,9 +48,19 @@ namespace ag
 	{
 		for (size_t i = 0; i < m_objNames.size(); i++)
 			if (m_objNames[i] == obj) {
-				m_objMethods[i].push_back(FunctionData(name, type, args));
+				m_objMethods[i].push_back(FunctionData(obj, name, type, args));
 				break;
 			}
+	}
+	FunctionData Generator::GetMethod(std::string obj, std::string name)
+	{
+		for (size_t i = 0; i < m_objNames.size(); i++)
+			if (m_objNames[i] == obj)
+				for (size_t j = 0; j < m_objMethods[i].size(); j++)
+					if (m_objMethods[i][j].Name == name)
+						return m_objMethods[i][j];
+
+		return FunctionData();
 	}
 	ByteCode Generator::Get()
 	{
@@ -76,12 +86,22 @@ namespace ag
 
 		// function names
 		std::vector<FunctionData> funcs = Function.GetData();
-		std::vector<size_t> funcStartAddr(funcs.size());
+		std::vector<size_t> funcStartAddr;
 
-		bret.Add(BitConverter::Get((uint16_t)funcs.size()));
+		uint16_t funcCount = 0;
 		for (size_t i = 0; i < funcs.size(); i++) {
+			if (funcs[i].Object != "")
+				continue;
+			funcCount++;
+		}
+		bret.Add(BitConverter::Get(funcCount));
+
+		for (size_t i = 0; i < funcs.size(); i++) {
+			if (funcs[i].Object != "")
+				continue;
+
 			bret.Add(BitConverter::Get(funcs[i].Name, true));
-			funcStartAddr[i] = bret.Count();
+			funcStartAddr.push_back(bret.Count());
 			bret.Add(BitConverter::Get(0u));
 		}
 
@@ -103,6 +123,7 @@ namespace ag
 
 
 		// objects
+		std::vector<size_t> methodStartAddr;
 		bret.Add(BitConverter::Get((uint16_t)m_objNames.size()));
 		for (size_t i = 0; i < m_objNames.size(); i++) {
 			bret.Add(BitConverter::Get(m_objNames[i], true));
@@ -116,17 +137,33 @@ namespace ag
 			bret.Add(BitConverter::Get((uint16_t)m_objMethods[i].size()));
 			for (size_t j = 0; j < m_objMethods[i].size(); j++) {
 				bret.Add(BitConverter::Get(m_objMethods[i][j].Name, true));
+				methodStartAddr.push_back(bret.Count());
 				bret.Add(BitConverter::Get(0u)); // address [todo]
 			}
 		}
 
 
 		// function code
+		size_t curFunc = 0;
 		for (size_t i = 0; i < funcs.size(); i++) {
-			bret.Write(funcStartAddr[i], BitConverter::Get(bret.Count()));
+			if (funcs[i].Object != "")
+				continue;
+			
+			bret.Write(funcStartAddr[curFunc], BitConverter::Get(bret.Count()));
 			bret.Add(Function.Get(funcs[i].Name));
+			curFunc++;
 		}
-		
+
+		// method code
+		size_t curMethod = 0;
+		for (size_t i = 0; i < m_objNames.size(); i++) {
+			for (size_t j = 0; j < m_objMethods[i].size(); j++) {
+				bret.Write(methodStartAddr[curMethod], BitConverter::Get(bret.Count()));
+				bret.Add(Function.Get(m_objMethods[i][j].Name, m_objMethods[i][j].Object));
+				curMethod++;
+			}
+		}
+
 		return bret;
 	}
 }

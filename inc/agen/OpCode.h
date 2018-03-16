@@ -53,6 +53,8 @@ namespace ag
 		GetMyProperty,
 		CallMethod,
 		CallMyMethod,
+		CallReturnMethod,
+		CallMyReturnMethod,
 	};
 }
 

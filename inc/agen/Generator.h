@@ -19,6 +19,7 @@ namespace ag
 		size_t AddObject(std::string name);
 		void AddProperty(std::string obj, std::string prop);
 		void AddMethod(std::string obj, std::string name, ag::Type type, std::vector<ag::Type> args);
+		FunctionData GetMethod(std::string obj, std::string name);
 
 		FunctionManager Function;
 

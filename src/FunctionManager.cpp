@@ -1,10 +1,11 @@
 #include <agen/FunctionManager.h>
 #include <agen/BitConverter.h>
+#include <agen/Generator.h>
 #include <agen/OpCode.h>
 
 namespace ag
 {
-	FunctionManager::FunctionManager() : m_cur(0) { }
+	FunctionManager::FunctionManager(Generator& g) : m_gen(g), m_cur(0) { }
 
 	size_t FunctionManager::Create(std::string name, ag::Type ret, std::vector<ag::Type> args)
 	{
@@ -35,11 +36,35 @@ namespace ag
 			}
 	}
 
-	ByteCode FunctionManager::Get(std::string name)
+	void FunctionManager::SetCurrent(std::string obj, std::string name)
+	{
+		size_t id = m_code.size();
+
+		FunctionData data = m_gen.GetMethod(obj, name);
+
+		m_code.push_back(ByteCode());
+		m_funcs.push_back(data);
+		m_linkAddr.resize(m_linkAddr.size() + 1);
+		m_locals.push_back(0);
+
+		m_code[id].Add(OpCode::FunctionStart);
+		m_code[id].Add(data.Return);
+		m_code[id].Add((uint8_t)data.Arguments.size());
+		for (size_t i = 0; i < data.Arguments.size(); i++)
+			m_code[id].Add(data.Arguments[i]);
+
+		m_lengthAddr.push_back(m_code[id].Count());
+
+		m_code[id].Add(BitConverter::Get(0u));
+
+		m_cur = id;
+	}
+
+	ByteCode FunctionManager::Get(std::string name, std::string obj)
 	{
 		size_t i = 0;
 		for (; i < m_funcs.size(); i++)
-			if (m_funcs[i].Name == name) break;
+			if (m_funcs[i].Name == name && m_funcs[i].Object == obj) break;
 		
 		m_code[i].Write(m_lengthAddr[i],
 			BitConverter::Get(
@@ -248,6 +273,40 @@ namespace ag
 		m_code[m_cur].Add(OpCode::SetProperty);
 		m_code[m_cur].Add(BitConverter::Get(prop, true));
 		SetLocal(loc_id);
+	}
+	void FunctionManager::GetMyProperty(std::string prop)
+	{
+		m_code[m_cur].Add(OpCode::GetMyProperty);
+		m_code[m_cur].Add(BitConverter::Get(prop, true));
+	}
+	void FunctionManager::SetMyProperty(std::string prop)
+	{
+		m_code[m_cur].Add(OpCode::SetMyProperty);
+		m_code[m_cur].Add(BitConverter::Get(prop, true));
+	}
+	void FunctionManager::CallMethod(std::string mtd, uint8_t argc)
+	{
+		m_code[m_cur].Add(OpCode::CallMethod);
+		m_code[m_cur].Add(BitConverter::Get(mtd, true));
+		m_code[m_cur].Add(argc);
+	}
+	void FunctionManager::CallMyMethod(std::string mtd, uint8_t argc)
+	{
+		m_code[m_cur].Add(OpCode::CallMyMethod);
+		m_code[m_cur].Add(BitConverter::Get(mtd, true));
+		m_code[m_cur].Add(argc);
+	}
+	void FunctionManager::CallReturnMethod(std::string mtd, uint8_t argc)
+	{
+		m_code[m_cur].Add(OpCode::CallReturnMethod);
+		m_code[m_cur].Add(BitConverter::Get(mtd, true));
+		m_code[m_cur].Add(argc);
+	}
+	void FunctionManager::CallMyReturnMethod(std::string mtd, uint8_t argc)
+	{
+		m_code[m_cur].Add(OpCode::CallMyReturnMethod);
+		m_code[m_cur].Add(BitConverter::Get(mtd, true));
+		m_code[m_cur].Add(argc);
 	}
 	size_t& FunctionManager::If()
 	{

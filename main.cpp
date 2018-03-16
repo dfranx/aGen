@@ -76,6 +76,24 @@ int main() {
 		gen.AddMethod("Animal", "Animal", ag::Type::Void, {});	// constructor
 		gen.AddMethod("Animal", "status", ag::Type::Void, {});	// dog.status();
 
+	gen.Function.SetCurrent("Animal", "Animal");// constructor
+		gen.Function.PushStack("Dog");
+		gen.Function.SetMyProperty("type");		// this->type = "Dog"
+		gen.Function.PushStack("Jeff");
+		gen.Function.SetMyProperty("name");		// this->name = "Jeff"
+		gen.Function.PushStack(100);
+		gen.Function.SetMyProperty("health");		// this->health = 100
+
+	gen.Function.SetCurrent("Animal", "status");
+		gen.Function.PushStack(";\n");
+		gen.Function.GetMyProperty("health");
+		gen.Function.PushStack("; hp = ");
+		gen.Function.GetMyProperty("name");
+		gen.Function.PushStack("; name = ");
+		gen.Function.GetMyProperty("type");
+		gen.Function.PushStack("type = ");
+		gen.Function.Call("print", 7);
+
 	gen.Function.Create("main", ag::Type::Int, {});
 	gen.Function.Create("fib", ag::Type::Int, { ag::Type::Int });
 
@@ -114,32 +132,18 @@ int main() {
 	gen.Function.SetCurrent("main");
 		gen.Function.NewObject(cid);
 		gen.Function.SetLocal(0);
-		gen.Function.NewObject(cid);
-		gen.Function.SetLocal(1);
 
 		gen.Function.PushStack(100);
 		gen.Function.SetProperty(0, "health");
 
-		gen.Function.PushStack(90);
-		gen.Function.SetProperty(1, "health");
+		gen.Function.PushStack("Jeff");
+		gen.Function.SetProperty(0, "name");
 
 		gen.Function.PushStack("dog");
 		gen.Function.SetProperty(0, "type");
 
-		gen.Function.PushStack("cat");
-		gen.Function.SetProperty(1, "type");
-
-		gen.Function.GetProperty(0, "type");
-		gen.Function.Call("print", 1);
-
-		gen.Function.GetProperty(0, "health");
-		gen.Function.Call("print", 1);
-
-		gen.Function.GetProperty(1, "type");
-		gen.Function.Call("print", 1);
-
-		gen.Function.GetProperty(1, "health");
-		gen.Function.Call("print", 1);
+		gen.Function.GetLocal(0);
+		gen.Function.CallMethod("status", 0);
 
 		gen.Function.GetGlobal(nid);
 		gen.Function.CallReturn("fib", 1);
