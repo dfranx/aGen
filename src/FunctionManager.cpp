@@ -4,10 +4,7 @@
 
 namespace ag
 {
-	FunctionManager::FunctionManager()
-	{
-		m_cur = 0;
-	}
+	FunctionManager::FunctionManager() : m_cur(0) { }
 
 	size_t FunctionManager::Create(std::string name, ag::Type ret, std::vector<ag::Type> args)
 	{
@@ -233,6 +230,24 @@ namespace ag
 	{
 		m_code[m_cur].Add(OpCode::IsTypeOf);
 		m_code[m_cur].Add(type);
+	}
+	void FunctionManager::NewObject(uint16_t object_id)
+	{
+		m_code[m_cur].Add(OpCode::NewObject);
+		m_code[m_cur].Add(BitConverter::Get(object_id));
+	}
+	void FunctionManager::GetProperty(uint16_t loc_id, std::string prop)
+	{
+		GetLocal(loc_id);
+		m_code[m_cur].Add(OpCode::GetProperty);
+		m_code[m_cur].Add(BitConverter::Get(prop, true));
+	}
+	void FunctionManager::SetProperty(uint16_t loc_id, std::string prop)
+	{
+		GetLocal(loc_id);
+		m_code[m_cur].Add(OpCode::SetProperty);
+		m_code[m_cur].Add(BitConverter::Get(prop, true));
+		SetLocal(loc_id);
 	}
 	size_t& FunctionManager::If()
 	{

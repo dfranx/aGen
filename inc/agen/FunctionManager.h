@@ -58,6 +58,9 @@ namespace ag
 		void Call(std::string name, uint8_t argc);
 		void CallReturn(std::string name, uint8_t argc);
 		void IsTypeOf(ag::Type type);
+		void NewObject(uint16_t object_id);
+		void GetProperty(uint16_t loc_id, std::string prop);
+		void SetProperty(uint16_t loc_id, std::string prop);
 		size_t& If();
 		size_t& Goto();
 

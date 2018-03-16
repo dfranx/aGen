@@ -41,7 +41,7 @@ int main() {
 		gen.Function.SetLocal(0);				// loc0 = Animal();
 
 		gen.Function.PushStack("Donna");		// "Donna"
-		gen.Function.GetLocal(0);				// "Donna" loc0
+		gen.Function.GetLocal(0);				// loc0 "Donna" 
 		gen.Function.SetProperty("name");		// loc0.name = "Donna"
 		gen.Function.SetLocal(0);
 
@@ -69,7 +69,7 @@ int main() {
 
 	size_t nid = gen.AddGlobal("a");
 
-	gen.AddObject("Animal");
+	size_t cid = gen.AddObject("Animal");
 		gen.AddProperty("Animal", "type");
 		gen.AddProperty("Animal", "name");
 		gen.AddProperty("Animal", "health");
@@ -112,6 +112,35 @@ int main() {
 
 
 	gen.Function.SetCurrent("main");
+		gen.Function.NewObject(cid);
+		gen.Function.SetLocal(0);
+		gen.Function.NewObject(cid);
+		gen.Function.SetLocal(1);
+
+		gen.Function.PushStack(100);
+		gen.Function.SetProperty(0, "health");
+
+		gen.Function.PushStack(90);
+		gen.Function.SetProperty(1, "health");
+
+		gen.Function.PushStack("dog");
+		gen.Function.SetProperty(0, "type");
+
+		gen.Function.PushStack("cat");
+		gen.Function.SetProperty(1, "type");
+
+		gen.Function.GetProperty(0, "type");
+		gen.Function.Call("print", 1);
+
+		gen.Function.GetProperty(0, "health");
+		gen.Function.Call("print", 1);
+
+		gen.Function.GetProperty(1, "type");
+		gen.Function.Call("print", 1);
+
+		gen.Function.GetProperty(1, "health");
+		gen.Function.Call("print", 1);
+
 		gen.Function.GetGlobal(nid);
 		gen.Function.CallReturn("fib", 1);
 		gen.Function.Return();					// return 0

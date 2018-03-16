@@ -1,4 +1,5 @@
 #include <agen/Generator.h>
+#include <agen/FunctionManager.h>
 
 namespace ag
 {
