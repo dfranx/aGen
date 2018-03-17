@@ -256,10 +256,11 @@ namespace ag
 		m_code[m_cur].Add(OpCode::IsTypeOf);
 		m_code[m_cur].Add(type);
 	}
-	void FunctionManager::NewObject(uint16_t object_id)
+	void FunctionManager::NewObject(uint16_t object_id, uint8_t argc)
 	{
 		m_code[m_cur].Add(OpCode::NewObject);
 		m_code[m_cur].Add(BitConverter::Get(object_id));
+		m_code[m_cur].Add(argc);
 	}
 	void FunctionManager::GetProperty(uint16_t loc_id, std::string prop)
 	{

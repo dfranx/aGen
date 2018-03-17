@@ -133,15 +133,6 @@ int main() {
 		gen.Function.NewObject(cid);
 		gen.Function.SetLocal(0);
 
-		gen.Function.PushStack(100);
-		gen.Function.SetProperty(0, "health");
-
-		gen.Function.PushStack("Jeff");
-		gen.Function.SetProperty(0, "name");
-
-		gen.Function.PushStack("dog");
-		gen.Function.SetProperty(0, "type");
-
 		gen.Function.GetLocal(0);
 		gen.Function.CallMethod("status", 0);
 
@@ -151,7 +142,7 @@ int main() {
 
 	ag::ByteCode bc = gen.Get();// get bytecode
 
-	std::ofstream file("E:/agen/test.bv", std::ios::out | std::ios::binary);
+	std::ofstream file("test.bv", std::ios::out | std::ios::binary);
 	file.write(reinterpret_cast<const char *>(bc.Get().data()), bc.Count());
 
 	std::cout << "[end]" << std::endl;
