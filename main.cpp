@@ -109,7 +109,7 @@ int main() {
 		gen.Function.GetArgument(0);
 		gen.Function.PushStack(1);
 		gen.Function.Equal();
-		size_t& if2 = gen.Function.If(); // if (arg0 == 1)
+		size_t& if2 = gen.Function.If(); // if (arg1 == 1)
 			gen.Function.PushStack(1);
 			gen.Function.Return();
 		gen.Function.GetCurrentAddress(if2);
@@ -133,16 +133,28 @@ int main() {
 		gen.Function.NewObject(cid);
 		gen.Function.SetLocal(0);
 
+		gen.Function.PushStack(10);
+		gen.Function.NewArray(1);
+		gen.Function.SetLocal(1);
+
+		gen.Function.PushStack(3);		// 3
+		gen.Function.PushStack(3);		// 3 3
+		gen.Function.GetLocal(1);		// loc1 3 3
+		gen.Function.PushStack(10);		// 10 loc1 3 3
+		gen.Function.SetArrayElement();	// (loc1[3] = 10) 3
+		gen.Function.GetArrayElement();	// (loc1[3] = 10)[3]
+		gen.Function.Call("print", 1);	// print((loc1[3] = 10)[3]);
+
 		gen.Function.GetLocal(0);
 		gen.Function.CallMethod("status", 0);
 
 		gen.Function.GetGlobal(nid);
 		gen.Function.CallReturn("fib", 1);
 		gen.Function.Return();					// return 0
-
+		
 	ag::ByteCode bc = gen.Get();// get bytecode
 
-	std::ofstream file("test.bv", std::ios::out | std::ios::binary);
+	std::ofstream file("E:/aGen/test.bv", std::ios::out | std::ios::binary);
 	file.write(reinterpret_cast<const char *>(bc.Get().data()), bc.Count());
 
 	std::cout << "[end]" << std::endl;

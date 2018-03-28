@@ -41,6 +41,8 @@ namespace ag
 		GetGlobal,
 		SetGlobal,
 		NewArray,
+		SetArrayElement,
+		GetArrayElement,
 		Call,
 		CallReturn,
 		IsTypeOf,

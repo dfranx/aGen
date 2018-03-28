@@ -215,14 +215,14 @@ namespace ag
 	void FunctionManager::GetLocal(uint16_t loc_id)
 	{
 		m_code[m_cur].Add(OpCode::GetLocal);
-		m_code[m_cur].Add(BitConverter::Get(loc_id + (uint16_t)m_funcs[m_cur].Arguments.size()));
+		m_code[m_cur].Add(BitConverter::Get((uint16_t)(loc_id + m_funcs[m_cur].Arguments.size())));
 	}
 	void FunctionManager::SetLocal(uint16_t loc_id)
 	{
 		m_locals[m_cur] = std::max(m_locals[m_cur], loc_id);
 
 		m_code[m_cur].Add(OpCode::SetLocal);
-		m_code[m_cur].Add(BitConverter::Get(loc_id + (uint16_t)m_funcs[m_cur].Arguments.size()));
+		m_code[m_cur].Add(BitConverter::Get((uint16_t)(loc_id + m_funcs[m_cur].Arguments.size())));
 	}
 	void FunctionManager::GetGlobal(uint16_t glob_id)
 	{
@@ -238,6 +238,14 @@ namespace ag
 	{
 		m_code[m_cur].Add(OpCode::NewArray);
 		m_code[m_cur].Add(dim);
+	}
+	void FunctionManager::SetArrayElement()
+	{
+		m_code[m_cur].Add(OpCode::SetArrayElement);
+	}
+	void FunctionManager::GetArrayElement()
+	{
+		m_code[m_cur].Add(OpCode::GetArrayElement);
 	}
 	void FunctionManager::Call(std::string name, uint8_t argc)
 	{
