@@ -136,8 +136,8 @@ int main() {
 
 		gen.Function.GetGlobal(nid);
 		gen.Function.CallReturn("fib", 1);
-		gen.Function.Return();					// return 0
-		
+		gen.Function.Return();
+
 	ag::ByteCode bc = gen.Get();// get bytecode
 
 	std::ofstream file("E:/aGen/test.bv", std::ios::out | std::ios::binary);

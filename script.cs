@@ -10,16 +10,16 @@ struct Animal:
     end
 end
 
-def fib($arg0, $arg1):
+def fib($arg0):
     if ($arg0 == 0):
         return 0;
     end
 
-    if ($arg1 == 0):
+    if ($arg0 == 1):
         return 1;
     end
 
-    return fib($arg0 - 1) + fib($arg1 - 2);
+    return fib($arg0 - 1) + fib($arg0 - 2);
 end
 
 def main():

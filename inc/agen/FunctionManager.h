@@ -65,6 +65,8 @@ namespace ag
 		void NewObject(uint16_t object_id, uint8_t argc = 0);
 		void GetProperty(uint16_t loc_id, std::string prop);
 		void SetProperty(uint16_t loc_id, std::string prop);
+		void GetProperty(std::string prop);
+		void SetProperty(std::string prop);
 		void GetMyProperty(std::string prop);
 		void SetMyProperty(std::string prop);
 		void CallMethod(std::string mtd, uint8_t argc);

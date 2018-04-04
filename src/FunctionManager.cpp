@@ -279,6 +279,16 @@ namespace ag
 		m_code[m_cur].Add(BitConverter::Get(prop, true));
 		SetLocal(loc_id);
 	}
+	void FunctionManager::GetProperty(std::string prop)
+	{
+		m_code[m_cur].Add(OpCode::GetProperty);
+		m_code[m_cur].Add(BitConverter::Get(prop, true));
+	}
+	void FunctionManager::SetProperty(std::string prop)
+	{
+		m_code[m_cur].Add(OpCode::SetProperty);
+		m_code[m_cur].Add(BitConverter::Get(prop, true));
+	}
 	void FunctionManager::GetMyProperty(std::string prop)
 	{
 		m_code[m_cur].Add(OpCode::GetMyProperty);
