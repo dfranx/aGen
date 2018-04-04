@@ -44,7 +44,7 @@ namespace ag
 				break;
 			}
 	}
-	void Generator::AddMethod(std::string obj, std::string name, ag::Type type, std::vector<ag::Type> args)
+	void Generator::AddMethod(std::string obj, std::string name, ag::Type type, uint8_t args)
 	{
 		for (size_t i = 0; i < m_objNames.size(); i++)
 			if (m_objNames[i] == obj) {

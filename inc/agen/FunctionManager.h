@@ -14,7 +14,7 @@ namespace ag
 	public:
 		FunctionManager(Generator& gen);
 		
-		size_t Create(std::string str, ag::Type ret, std::vector<ag::Type> args);
+		size_t Create(std::string str, ag::Type ret, uint8_t args = 0);
 		void SetCurrent(std::string name);
 		void SetCurrent(std::string obj, std::string name);
 		ByteCode Get(std::string name, std::string obj = "");

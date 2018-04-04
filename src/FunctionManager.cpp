@@ -7,20 +7,18 @@ namespace ag
 {
 	FunctionManager::FunctionManager(Generator& g) : m_gen(g), m_cur(0) { }
 
-	size_t FunctionManager::Create(std::string name, ag::Type ret, std::vector<ag::Type> args)
+	size_t FunctionManager::Create(std::string name, ag::Type ret, uint8_t arg_count)
 	{
 		size_t id = m_code.size();
 
 		m_code.push_back(ByteCode());
-		m_funcs.push_back(FunctionData(name, ret, args));
+		m_funcs.push_back(FunctionData(name, ret, arg_count));
 		m_linkAddr.resize(m_linkAddr.size() + 1);
 		m_locals.push_back(0);
 		
 		m_code[id].Add(OpCode::FunctionStart);
 		m_code[id].Add(ret);
-		m_code[id].Add((uint8_t)args.size());
-		for (size_t i = 0; i < args.size(); i++)
-			m_code[id].Add(args[i]);
+		m_code[id].Add(arg_count);
 		
 		m_lengthAddr.push_back(m_code[id].Count());
 
@@ -49,9 +47,7 @@ namespace ag
 
 		m_code[id].Add(OpCode::FunctionStart);
 		m_code[id].Add(data.Return);
-		m_code[id].Add((uint8_t)data.Arguments.size());
-		for (size_t i = 0; i < data.Arguments.size(); i++)
-			m_code[id].Add(data.Arguments[i]);
+		m_code[id].Add(data.Arguments);
 
 		m_lengthAddr.push_back(m_code[id].Count());
 
@@ -215,14 +211,14 @@ namespace ag
 	void FunctionManager::GetLocal(uint16_t loc_id)
 	{
 		m_code[m_cur].Add(OpCode::GetLocal);
-		m_code[m_cur].Add(BitConverter::Get((uint16_t)(loc_id + m_funcs[m_cur].Arguments.size())));
+		m_code[m_cur].Add(BitConverter::Get((uint16_t)(loc_id + m_funcs[m_cur].Arguments)));
 	}
 	void FunctionManager::SetLocal(uint16_t loc_id)
 	{
 		m_locals[m_cur] = std::max(m_locals[m_cur], loc_id);
 
 		m_code[m_cur].Add(OpCode::SetLocal);
-		m_code[m_cur].Add(BitConverter::Get((uint16_t)(loc_id + m_funcs[m_cur].Arguments.size())));
+		m_code[m_cur].Add(BitConverter::Get((uint16_t)(loc_id + m_funcs[m_cur].Arguments)));
 	}
 	void FunctionManager::GetGlobal(uint16_t glob_id)
 	{
@@ -347,6 +343,6 @@ namespace ag
 	}
 	uint16_t FunctionManager::GetNextLocal()
 	{
-		return m_locals[m_cur] + 1 + (uint16_t)m_funcs[m_cur].Arguments.size();
+		return m_locals[m_cur] + 1 + m_funcs[m_cur].Arguments;
 	}
 }
