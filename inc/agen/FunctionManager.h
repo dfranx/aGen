@@ -39,6 +39,8 @@ namespace ag
 		void BitXor();
 		void BitLeftShift();
 		void BitRightShift();
+		void BoolOr();
+		void BoolAnd();
 		void Equal();
 		void NotEqual();
 		void Not();
@@ -63,6 +65,7 @@ namespace ag
 		void CallReturn(std::string name, uint8_t argc);
 		void IsTypeOf(ag::Type type);
 		void NewObject(uint16_t object_id, uint8_t argc = 0);
+		void PushNull();
 		void GetProperty(uint16_t loc_id, std::string prop);
 		void SetProperty(uint16_t loc_id, std::string prop);
 		void GetProperty(std::string prop);
@@ -73,10 +76,13 @@ namespace ag
 		void CallMyMethod(std::string mtd, uint8_t argc);
 		void CallReturnMethod(std::string mtd, uint8_t argc);
 		void CallMyReturnMethod(std::string mtd, uint8_t argc);
-		size_t& If();
-		size_t& Goto();
+		size_t If();
+		size_t Goto();
+		void ScopeStart();
+		void ScopeEnd();
 
-		void GetCurrentAddress(size_t& adr);
+		void SetAddress(size_t id, size_t addr);
+		size_t GetCurrentAddress();
 		uint16_t GetNextLocal();
 
 	private:

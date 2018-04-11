@@ -25,6 +25,8 @@ namespace ag
 		BitXor,
 		BitLeftShift,
 		BitRightShift,
+		BoolOr,
+		BoolAnd,
 		Equal,
 		NotEqual,
 		Not,
@@ -57,6 +59,8 @@ namespace ag
 		CallMyMethod,
 		CallReturnMethod,
 		CallMyReturnMethod,
+		ScopeStart,
+		ScopeEnd
 	};
 }
 

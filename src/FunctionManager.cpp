@@ -153,6 +153,14 @@ namespace ag
 	{
 		m_code[m_cur].Add(OpCode::BitRightShift);
 	}
+	void FunctionManager::BoolOr()
+	{
+		m_code[m_cur].Add(OpCode::BoolOr);
+	}
+	void FunctionManager::BoolAnd()
+	{
+		m_code[m_cur].Add(OpCode::BoolAnd);
+	}
 	void FunctionManager::Equal()
 	{
 		m_code[m_cur].Add(OpCode::Equal);
@@ -263,8 +271,14 @@ namespace ag
 	void FunctionManager::NewObject(uint16_t object_id, uint8_t argc)
 	{
 		m_code[m_cur].Add(OpCode::NewObject);
-		m_code[m_cur].Add(BitConverter::Get(object_id));
+		m_code[m_cur].Add(BitConverter::Get(object_id+1));
 		m_code[m_cur].Add(argc);
+	}
+	void FunctionManager::PushNull()
+	{
+		m_code[m_cur].Add(OpCode::NewObject);
+		m_code[m_cur].Add(BitConverter::Get((uint16_t)0));
+		m_code[m_cur].Add(0);
 	}
 	void FunctionManager::GetProperty(uint16_t loc_id, std::string prop)
 	{
@@ -323,7 +337,7 @@ namespace ag
 		m_code[m_cur].Add(BitConverter::Get(mtd, true));
 		m_code[m_cur].Add(argc);
 	}
-	size_t& FunctionManager::If()
+	size_t FunctionManager::If()
 	{
 		m_code[m_cur].Add(OpCode::If);
 		
@@ -333,9 +347,9 @@ namespace ag
 
 		m_code[m_cur].Add(BitConverter::Get(0u));
 
-		return m_linkAddr[m_cur][cur_if].second;
+		return cur_if;
 	}
-	size_t & FunctionManager::Goto()
+	size_t FunctionManager::Goto()
 	{
 		m_code[m_cur].Add(OpCode::Goto);
 
@@ -345,11 +359,23 @@ namespace ag
 
 		m_code[m_cur].Add(BitConverter::Get(0u));
 
-		return m_linkAddr[m_cur][cur_link].second;
+		return cur_link;
 	}
-	void FunctionManager::GetCurrentAddress(size_t& adr)
+	void FunctionManager::ScopeStart()
 	{
-		adr = m_code[m_cur].Count();
+		m_code[m_cur].Add(OpCode::ScopeStart);
+	}
+	void FunctionManager::ScopeEnd()
+	{
+		m_code[m_cur].Add(OpCode::ScopeEnd);
+	}
+	void FunctionManager::SetAddress(size_t id, size_t addr)
+	{
+		m_linkAddr[m_cur][id].second = addr;
+	}
+	size_t FunctionManager::GetCurrentAddress()
+	{
+		return m_code[m_cur].Count();
 	}
 	uint16_t FunctionManager::GetNextLocal()
 	{
