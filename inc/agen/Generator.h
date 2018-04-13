@@ -5,6 +5,7 @@
 #include <agen/BitConverter.h>
 #include <agen/ByteCode.h>
 #include <agen/Type.h>
+#include <string>
 
 namespace ag
 {
@@ -21,6 +22,9 @@ namespace ag
 		void AddMethod(std::string obj, std::string name, ag::Type type, uint8_t args = 0);
 		FunctionData GetMethod(std::string obj, std::string name);
 
+		int AddString(const std::string& str);
+		int GetStringIndex(const std::string& str);
+
 		FunctionManager Function;
 
 		ByteCode Get();
@@ -28,6 +32,7 @@ namespace ag
 	private:
 		uint8_t m_ver_major;
 		uint16_t m_ver_minor;
+		std::vector<std::string> m_strtbl;
 		std::vector<std::string> m_globals;
 		std::vector<std::string> m_objNames;
 		std::vector<std::vector<std::string>> m_objProps;

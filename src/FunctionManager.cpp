@@ -86,7 +86,11 @@ namespace ag
 	{
 		m_code[m_cur].Add(OpCode::PushStack);
 		m_code[m_cur].Add(VariantToType(v));
-		m_code[m_cur].Add(BitConverter::Get(v));
+
+		if (VariantToType(v) == ag::Type::String)
+			m_code[m_cur].Add(BitConverter::Get(m_gen.AddString(mpark::get<std::string>(v)))); // only push string id (string table)
+		else
+			m_code[m_cur].Add(BitConverter::Get(v));
 	}
 	void FunctionManager::PopStack()
 	{
@@ -254,13 +258,13 @@ namespace ag
 	void FunctionManager::Call(std::string name, uint8_t argc)
 	{
 		m_code[m_cur].Add(OpCode::Call);
-		m_code[m_cur].Add(BitConverter::Get(name, true));
+		m_code[m_cur].Add(BitConverter::Get(m_gen.AddString(name)));
 		m_code[m_cur].Add(argc);
 	}
 	void FunctionManager::CallReturn(std::string name, uint8_t argc)
 	{
 		m_code[m_cur].Add(OpCode::CallReturn);
-		m_code[m_cur].Add(BitConverter::Get(name, true));
+		m_code[m_cur].Add(BitConverter::Get(m_gen.AddString(name)));
 		m_code[m_cur].Add(argc);
 	}
 	void FunctionManager::IsTypeOf(ag::Type type)
@@ -284,57 +288,57 @@ namespace ag
 	{
 		GetLocal(loc_id);
 		m_code[m_cur].Add(OpCode::GetProperty);
-		m_code[m_cur].Add(BitConverter::Get(prop, true));
+		m_code[m_cur].Add(BitConverter::Get(m_gen.AddString(prop)));
 	}
 	void FunctionManager::SetProperty(uint16_t loc_id, std::string prop)
 	{
 		GetLocal(loc_id);
 		m_code[m_cur].Add(OpCode::SetProperty);
-		m_code[m_cur].Add(BitConverter::Get(prop, true));
+		m_code[m_cur].Add(BitConverter::Get(m_gen.AddString(prop)));
 		SetLocal(loc_id);
 	}
 	void FunctionManager::GetProperty(std::string prop)
 	{
 		m_code[m_cur].Add(OpCode::GetProperty);
-		m_code[m_cur].Add(BitConverter::Get(prop, true));
+		m_code[m_cur].Add(BitConverter::Get(m_gen.AddString(prop)));
 	}
 	void FunctionManager::SetProperty(std::string prop)
 	{
 		m_code[m_cur].Add(OpCode::SetProperty);
-		m_code[m_cur].Add(BitConverter::Get(prop, true));
+		m_code[m_cur].Add(BitConverter::Get(m_gen.AddString(prop)));
 	}
 	void FunctionManager::GetMyProperty(std::string prop)
 	{
 		m_code[m_cur].Add(OpCode::GetMyProperty);
-		m_code[m_cur].Add(BitConverter::Get(prop, true));
+		m_code[m_cur].Add(BitConverter::Get(m_gen.AddString(prop)));
 	}
 	void FunctionManager::SetMyProperty(std::string prop)
 	{
 		m_code[m_cur].Add(OpCode::SetMyProperty);
-		m_code[m_cur].Add(BitConverter::Get(prop, true));
+		m_code[m_cur].Add(BitConverter::Get(m_gen.AddString(prop)));
 	}
 	void FunctionManager::CallMethod(std::string mtd, uint8_t argc)
 	{
 		m_code[m_cur].Add(OpCode::CallMethod);
-		m_code[m_cur].Add(BitConverter::Get(mtd, true));
+		m_code[m_cur].Add(BitConverter::Get(m_gen.AddString(mtd)));
 		m_code[m_cur].Add(argc);
 	}
 	void FunctionManager::CallMyMethod(std::string mtd, uint8_t argc)
 	{
 		m_code[m_cur].Add(OpCode::CallMyMethod);
-		m_code[m_cur].Add(BitConverter::Get(mtd, true));
+		m_code[m_cur].Add(BitConverter::Get(m_gen.AddString(mtd)));
 		m_code[m_cur].Add(argc);
 	}
 	void FunctionManager::CallReturnMethod(std::string mtd, uint8_t argc)
 	{
 		m_code[m_cur].Add(OpCode::CallReturnMethod);
-		m_code[m_cur].Add(BitConverter::Get(mtd, true));
+		m_code[m_cur].Add(BitConverter::Get(m_gen.AddString(mtd)));
 		m_code[m_cur].Add(argc);
 	}
 	void FunctionManager::CallMyReturnMethod(std::string mtd, uint8_t argc)
 	{
 		m_code[m_cur].Add(OpCode::CallMyReturnMethod);
-		m_code[m_cur].Add(BitConverter::Get(mtd, true));
+		m_code[m_cur].Add(BitConverter::Get(m_gen.AddString(mtd)));
 		m_code[m_cur].Add(argc);
 	}
 	size_t FunctionManager::If()

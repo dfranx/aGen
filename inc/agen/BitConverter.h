@@ -9,7 +9,7 @@ namespace ag
 	class BitConverter
 	{
 	public:	
-		static std::vector<uint8_t> Get(std::string s, bool place_null = false);
+		static std::vector<uint8_t> Get(std::string s, bool place_null = true);
 		static std::vector<uint8_t> Get(uint16_t u);
 		static std::vector<uint8_t> Get(int u);
 		static std::vector<uint8_t> Get(unsigned int u);

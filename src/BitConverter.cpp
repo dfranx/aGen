@@ -71,7 +71,7 @@ namespace ag
 		else if (mpark::holds_alternative<float>(v))
 			return BitConverter::Get(mpark::get<float>(v));
 		else if (mpark::holds_alternative<std::string>(v))
-			return BitConverter::Get(mpark::get<std::string>(v), true);
+			return BitConverter::Get(mpark::get<std::string>(v));
 		return std::vector<uint8_t>();
 	}
 }
