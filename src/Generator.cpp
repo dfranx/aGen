@@ -44,11 +44,11 @@ namespace ag
 				break;
 			}
 	}
-	void Generator::AddMethod(std::string obj, std::string name, ag::Type type, uint8_t args)
+	void Generator::AddMethod(std::string obj, std::string name, uint8_t args)
 	{
 		for (size_t i = 0; i < m_objNames.size(); i++)
 			if (m_objNames[i] == obj) {
-				m_objMethods[i].push_back(FunctionData(obj, name, type, args));
+				m_objMethods[i].push_back(FunctionData(obj, name, args));
 				break;
 			}
 	}

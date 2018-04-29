@@ -14,8 +14,8 @@ int main() {
 		gen.AddProperty("Vehicle", "type");
 		gen.AddProperty("Vehicle", "owner");
 
-	gen.Function.Create("main", ag::Type::Int);
-	gen.Function.Create("fib", ag::Type::Int, 1);
+	gen.Function.Create("main");
+	gen.Function.Create("fib", 1);
 
 	gen.Function.SetCurrent("fib");
 		gen.Function.GetArgumentPointer(0);

@@ -7,17 +7,16 @@ namespace ag
 {
 	FunctionManager::FunctionManager(Generator& g) : m_gen(g), m_cur(0) { }
 
-	size_t FunctionManager::Create(std::string name, ag::Type ret, uint8_t arg_count)
+	size_t FunctionManager::Create(std::string name, uint8_t arg_count)
 	{
 		size_t id = m_code.size();
 
 		m_code.push_back(ByteCode());
-		m_funcs.push_back(FunctionData(name, ret, arg_count));
+		m_funcs.push_back(FunctionData(name, arg_count));
 		m_linkAddr.resize(m_linkAddr.size() + 1);
 		m_locals.push_back(0);
 		
 		m_code[id].Add(OpCode::FunctionStart);
-		m_code[id].Add(ret);
 		m_code[id].Add(arg_count);
 		
 		m_lengthAddr.push_back(m_code[id].Count());
@@ -36,9 +35,28 @@ namespace ag
 
 	void FunctionManager::SetCurrent(std::string obj, std::string name)
 	{
+		// find if we already used SetCurrent on this method
+		for (size_t i = 0; i < m_initializedMethods.size(); i++) {
+			if (m_initializedMethods[i].first == obj &&
+				m_initializedMethods[i].second == name) {
+
+				for (size_t j = 0; j < m_funcs.size(); j++) {
+					if (m_funcs[j].Name == name && m_funcs[j].Object == obj) {
+						m_cur = j;
+						break;
+					}
+				}
+
+				return;
+			}
+		}
+
+
+		// we reach this point only if we never used SetCurrent on this method
 		size_t id = m_code.size();
 
 		FunctionData data = m_gen.GetMethod(obj, name);
+		m_initializedMethods.push_back(std::make_pair(obj, name));
 
 		m_code.push_back(ByteCode());
 		m_funcs.push_back(data);
@@ -46,7 +64,6 @@ namespace ag
 		m_locals.push_back(0);
 
 		m_code[id].Add(OpCode::FunctionStart);
-		m_code[id].Add(data.Return);
 		m_code[id].Add(data.Arguments);
 
 		m_lengthAddr.push_back(m_code[id].Count());
@@ -415,6 +432,10 @@ namespace ag
 	{
 		m_code[m_cur].Add(OpCode::SetGlobalByName);
 		m_code[m_cur].Add(BitConverter::Get(m_gen.AddString(prop)));
+	}
+	void FunctionManager::EmptyStack()
+	{
+		m_code[m_cur].Add(OpCode::EmptyStack);
 	}
 
 	void FunctionManager::SetAddress(size_t id, size_t addr)

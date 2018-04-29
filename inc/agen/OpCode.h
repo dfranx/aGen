@@ -68,7 +68,8 @@ namespace ag
 		GetMyPropertyPointer,
 		GetGlobalByName,
 		GetGlobalPointerByName,
-		SetGlobalByName
+		SetGlobalByName,
+		EmptyStack
 	};
 }
 

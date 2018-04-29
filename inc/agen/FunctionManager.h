@@ -14,7 +14,7 @@ namespace ag
 	public:
 		FunctionManager(Generator& gen);
 		
-		size_t Create(std::string str, ag::Type ret, uint8_t args = 0);
+		size_t Create(std::string str, uint8_t args = 0);
 		void SetCurrent(std::string name);
 		void SetCurrent(std::string obj, std::string name);
 		ByteCode Get(std::string name, std::string obj = "");
@@ -89,6 +89,7 @@ namespace ag
 		void GetGlobalByName(std::string prop);
 		void GetGlobalPointerByName(std::string prop);
 		void SetGlobalByName(std::string prop);
+		void EmptyStack();
 
 		void SetAddress(size_t id, size_t addr);
 		size_t GetCurrentAddress();
@@ -102,6 +103,7 @@ namespace ag
 		std::vector<std::vector<std::pair<size_t,size_t>>> m_linkAddr;
 		std::vector<ByteCode> m_code;
 		std::vector<FunctionData> m_funcs;
+		std::vector<std::pair<std::string, std::string>> m_initializedMethods;
 	};
 }
 

@@ -19,7 +19,7 @@ namespace ag
 		size_t AddConstant(variant i);
 		size_t AddObject(std::string name);
 		void AddProperty(std::string obj, std::string prop);
-		void AddMethod(std::string obj, std::string name, ag::Type type, uint8_t args = 0);
+		void AddMethod(std::string obj, std::string name, uint8_t args = 0);
 		FunctionData GetMethod(std::string obj, std::string name);
 
 		int AddString(const std::string& str);

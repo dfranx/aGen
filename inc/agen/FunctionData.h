@@ -9,13 +9,12 @@ namespace ag
 	class FunctionData
 	{
 	public:
-		FunctionData() : Object(""), Name(""), Return(ag::Type::Void), Arguments(0) {}
-		FunctionData(std::string n, ag::Type ret, uint8_t args) : Object(""), Name(n), Return(ret), Arguments(args) { }
-		FunctionData(std::string obj, std::string n, ag::Type ret, uint8_t args) : Object(obj), Name(n), Return(ret), Arguments(args) { }
+		FunctionData() : Object(""), Name(""), Arguments(0) {}
+		FunctionData(std::string n, uint8_t args) : Object(""), Name(n), Arguments(args) { }
+		FunctionData(std::string obj, std::string n, uint8_t args) : Object(obj), Name(n), Arguments(args) { }
 
 		std::string Object;
 		std::string Name;
-		ag::Type Return;
 		uint8_t Arguments;
 	};
 }
