@@ -18,7 +18,7 @@ int main() {
 	gen.Function.Create("fib", ag::Type::Int, 1);
 
 	gen.Function.SetCurrent("fib");
-		gen.Function.GetArgument(0);
+		gen.Function.GetArgumentPointer(0);
 		gen.Function.PushStack(0);
 		gen.Function.Equal();
 		size_t if1 = gen.Function.If(); // if (arg0 == 0)
@@ -26,7 +26,7 @@ int main() {
 			gen.Function.Return();
 		gen.Function.SetAddress(if1, gen.Function.GetCurrentAddress());
 
-		gen.Function.GetArgument(0);
+		gen.Function.GetArgumentPointer(0);
 		gen.Function.PushStack(1);
 		gen.Function.Equal();
 		size_t if2 = gen.Function.If(); // if (arg1 == 1)
@@ -34,12 +34,12 @@ int main() {
 			gen.Function.Return();
 		gen.Function.SetAddress(if2, gen.Function.GetCurrentAddress());
 
-		gen.Function.GetArgument(0);
+		gen.Function.GetArgumentPointer(0);
 		gen.Function.PushStack(1);
 		gen.Function.Subtract();
 		gen.Function.CallReturn("fib", 1);
 
-		gen.Function.GetArgument(0);
+		gen.Function.GetArgumentPointer(0);
 		gen.Function.PushStack(2);
 		gen.Function.Subtract();
 		gen.Function.CallReturn("fib", 1);
@@ -59,9 +59,11 @@ int main() {
 		gen.Function.PushStack("Jeff");
 		gen.Function.SetProperty(0, "owner");
 
+		gen.Function.GetLocalPointer(0);
+		gen.Function.CallMethod("update", 0);
+
 		gen.Function.GetLocal(0);
 		gen.Function.CallMethod("status", 0);
-		gen.Function.PopStack(); // remove class from stack :(
 
 		gen.Function.PushStack(10);
 		gen.Function.NewArray(1);
@@ -81,6 +83,18 @@ int main() {
 		gen.Function.Equal();					// loc2 == null
 		gen.Function.PushStack("\nResult: ");
 		gen.Function.Call("print", 3);			// print(loc2 == null);
+
+		/* pointers! */
+		gen.Function.PushStack(100);
+		gen.Function.SetLocal(2);
+
+		gen.Function.GetLocalPointer(2);
+		gen.Function.PushStack(107.3f);
+		gen.Function.Assign();
+		gen.Function.PushStack("\n");
+		gen.Function.GetLocal(2);
+		gen.Function.PushStack("Pointer value: ");
+		gen.Function.Call("print", 3);
 
 		gen.Function.GetGlobal(nid);
 		gen.Function.CallReturn("fib", 1);

@@ -275,7 +275,7 @@ namespace ag
 	void FunctionManager::NewObject(uint16_t object_id, uint8_t argc)
 	{
 		m_code[m_cur].Add(OpCode::NewObject);
-		m_code[m_cur].Add(BitConverter::Get(object_id+1));
+		m_code[m_cur].Add(BitConverter::Get((uint16_t)(object_id+1)));
 		m_code[m_cur].Add(argc);
 	}
 	void FunctionManager::PushNull()
@@ -292,10 +292,9 @@ namespace ag
 	}
 	void FunctionManager::SetProperty(uint16_t loc_id, std::string prop)
 	{
-		GetLocal(loc_id);
+		GetLocalPointer(loc_id);
 		m_code[m_cur].Add(OpCode::SetProperty);
 		m_code[m_cur].Add(BitConverter::Get(m_gen.AddString(prop)));
-		SetLocal(loc_id);
 	}
 	void FunctionManager::GetProperty(std::string prop)
 	{
@@ -373,6 +372,51 @@ namespace ag
 	{
 		m_code[m_cur].Add(OpCode::ScopeEnd);
 	}
+	void FunctionManager::Assign()
+	{
+		m_code[m_cur].Add(OpCode::Assign);
+	}
+	void FunctionManager::GetArgumentPointer(uint16_t loc_id)
+	{
+		m_code[m_cur].Add(OpCode::GetLocalPointer);
+		m_code[m_cur].Add(BitConverter::Get(loc_id));
+	}
+	void FunctionManager::GetLocalPointer(uint16_t loc_id)
+	{
+		m_code[m_cur].Add(OpCode::GetLocalPointer);
+		m_code[m_cur].Add(BitConverter::Get((uint16_t)(loc_id + m_funcs[m_cur].Arguments)));
+	}
+	void FunctionManager::GetGlobalPointer(uint16_t loc_id)
+	{
+		m_code[m_cur].Add(OpCode::GetGlobalPointer);
+		m_code[m_cur].Add(BitConverter::Get(loc_id));
+	}
+	void FunctionManager::GetPropertyPointer(std::string prop)
+	{
+		m_code[m_cur].Add(OpCode::GetPropertyPointer);
+		m_code[m_cur].Add(BitConverter::Get(m_gen.AddString(prop)));
+	}
+	void FunctionManager::GetMyPropertyPointer(std::string prop)
+	{
+		m_code[m_cur].Add(OpCode::GetMyPropertyPointer);
+		m_code[m_cur].Add(BitConverter::Get(m_gen.AddString(prop)));
+	}
+	void FunctionManager::GetGlobalByName(std::string prop)
+	{
+		m_code[m_cur].Add(OpCode::GetGlobalByName);
+		m_code[m_cur].Add(BitConverter::Get(m_gen.AddString(prop)));
+	}
+	void FunctionManager::GetGlobalPointerByName(std::string prop)
+	{
+		m_code[m_cur].Add(OpCode::GetGlobalPointerByName);
+		m_code[m_cur].Add(BitConverter::Get(m_gen.AddString(prop)));
+	}
+	void FunctionManager::SetGlobalByName(std::string prop)
+	{
+		m_code[m_cur].Add(OpCode::SetGlobalByName);
+		m_code[m_cur].Add(BitConverter::Get(m_gen.AddString(prop)));
+	}
+
 	void FunctionManager::SetAddress(size_t id, size_t addr)
 	{
 		m_linkAddr[m_cur][id].second = addr;

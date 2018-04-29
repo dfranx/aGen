@@ -60,7 +60,15 @@ namespace ag
 		CallReturnMethod,
 		CallMyReturnMethod,
 		ScopeStart,
-		ScopeEnd
+		ScopeEnd,
+		Assign,
+		GetLocalPointer,
+		GetGlobalPointer,
+		GetPropertyPointer,
+		GetMyPropertyPointer,
+		GetGlobalByName,
+		GetGlobalPointerByName,
+		SetGlobalByName
 	};
 }
 

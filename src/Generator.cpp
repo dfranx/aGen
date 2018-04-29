@@ -100,10 +100,8 @@ namespace ag
 
 		// globals
 		bret.Add(BitConverter::Get((uint16_t)m_globals.size()));
-		for (size_t i = 0; i < m_globals.size(); i++) {
-			bret.Add(BitConverter::Get((uint16_t)i));	// id
+		for (size_t i = 0; i < m_globals.size(); i++)
 			bret.Add(BitConverter::Get(m_globals[i]));	// name
-		}
 
 
 		// function names
@@ -151,10 +149,8 @@ namespace ag
 			bret.Add(BitConverter::Get(m_objNames[i]));
 
 			bret.Add(BitConverter::Get((uint16_t)m_objProps[i].size()));
-			for (size_t j = 0; j < m_objProps[i].size(); j++) {
-				bret.Add(BitConverter::Get((uint16_t)j));
+			for (size_t j = 0; j < m_objProps[i].size(); j++)
 				bret.Add(BitConverter::Get(m_objProps[i][j]));
-			}
 
 			bret.Add(BitConverter::Get((uint16_t)m_objMethods[i].size()));
 			for (size_t j = 0; j < m_objMethods[i].size(); j++) {

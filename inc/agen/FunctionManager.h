@@ -80,6 +80,15 @@ namespace ag
 		size_t Goto();
 		void ScopeStart();
 		void ScopeEnd();
+		void Assign();
+		void GetArgumentPointer(uint16_t loc_id);
+		void GetLocalPointer(uint16_t loc_id);
+		void GetGlobalPointer(uint16_t loc_id);
+		void GetPropertyPointer(std::string prop);
+		void GetMyPropertyPointer(std::string prop);
+		void GetGlobalByName(std::string prop);
+		void GetGlobalPointerByName(std::string prop);
+		void SetGlobalByName(std::string prop);
 
 		void SetAddress(size_t id, size_t addr);
 		size_t GetCurrentAddress();
