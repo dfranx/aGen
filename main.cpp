@@ -19,6 +19,14 @@ int main() {
 
 	gen.Function.SetCurrent("fib");
 		gen.Function.GetArgumentPointer(0);
+		gen.Function.PushStack(24);
+		gen.Function.Equal();
+		size_t if3 = gen.Function.If(); // if (arg0 == 24)
+			gen.Function.DebugLineNumber(13); // random line number
+			gen.Function.Breakpoint();
+		gen.Function.SetAddress(if3, gen.Function.GetCurrentAddress());
+
+		gen.Function.GetArgumentPointer(0);
 		gen.Function.PushStack(0);
 		gen.Function.Equal();
 		size_t if1 = gen.Function.If(); // if (arg0 == 0)
@@ -50,6 +58,7 @@ int main() {
 
 
 	gen.Function.SetCurrent("main");
+		gen.Function.DebugFile("randomFile.js");
 		gen.Function.NewObject(cid);
 		gen.Function.SetLocal(0);
 

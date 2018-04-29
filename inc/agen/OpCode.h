@@ -69,7 +69,10 @@ namespace ag
 		GetGlobalByName,
 		GetGlobalPointerByName,
 		SetGlobalByName,
-		EmptyStack
+		EmptyStack,
+		DebugLineNumber,
+		DebugFile,
+		Breakpoint
 	};
 }
 

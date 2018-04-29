@@ -437,6 +437,20 @@ namespace ag
 	{
 		m_code[m_cur].Add(OpCode::EmptyStack);
 	}
+	void FunctionManager::DebugLineNumber(uint32_t line)
+	{
+		m_code[m_cur].Add(OpCode::DebugLineNumber);
+		m_code[m_cur].Add(BitConverter::Get(line));
+	}
+	void FunctionManager::DebugFile(std::string filename)
+	{
+		m_code[m_cur].Add(OpCode::DebugFile);
+		m_code[m_cur].Add(BitConverter::Get(m_gen.AddString(filename)));
+	}
+	void FunctionManager::Breakpoint()
+	{
+		m_code[m_cur].Add(OpCode::Breakpoint);
+	}
 
 	void FunctionManager::SetAddress(size_t id, size_t addr)
 	{

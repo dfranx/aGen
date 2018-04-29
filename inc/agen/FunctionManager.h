@@ -90,6 +90,9 @@ namespace ag
 		void GetGlobalPointerByName(std::string prop);
 		void SetGlobalByName(std::string prop);
 		void EmptyStack();
+		void DebugLineNumber(uint32_t line);
+		void DebugFile(std::string prop);
+		void Breakpoint();
 
 		void SetAddress(size_t id, size_t addr);
 		size_t GetCurrentAddress();
