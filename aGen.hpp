@@ -94,6 +94,7 @@ namespace ag
 		Float,
 		String,
 		Array,
+		Object,
 		Pointer,
 		Function
 	};
@@ -236,6 +237,8 @@ namespace ag
 			m_ver_major = major;
 			m_ver_minor = minor;
 		}
+		inline uint16_t GetVersionMinor() { return m_ver_minor; }
+		inline uint8_t GetVersionMajor() { return m_ver_major; }
 		inline size_t AddGlobal(std::string name)
 		{
 			m_globals.push_back(name);
@@ -309,7 +312,7 @@ namespace ag
 		public:
 			FunctionManager(Generator* gen) : m_gen(gen), m_cur(0) { }
 
-			inline size_t Create(std::string name, uint8_t argc = 0)
+			inline size_t Create(std::string name, uint8_t argc = 0, std::vector<ag::Type> atypes = {}, std::vector<std::string> anames = {})
 			{
 				size_t id = m_code.size();
 
@@ -320,6 +323,20 @@ namespace ag
 
 				m_code[id].Add(OpCode::FunctionStart);
 				m_code[id].Add(argc);
+
+				if (!(m_gen->GetVersionMajor() == 0 && m_gen->GetVersionMinor() == 1)) {
+					// TODO: argument types, m_code[id].Add()
+					if (atypes.size() == anames.size() && atypes.size() == argc) {
+						for (uint8_t i = 0; i < atypes.size(); i++) {
+							m_code[id].Add(atypes[i]);
+							if (atypes[i] == ag::Type::Object)
+								m_code[id].Add(BitConverter::GetString(anames[i]));
+						}
+					}
+					else
+						for (uint8_t i = 0; i < argc; i++)
+							m_code[id].Add(ag::Type::Void);
+				}
 
 				m_lengthAddr.push_back(m_code[id].Count());
 
@@ -334,6 +351,10 @@ namespace ag
 						m_cur = i;
 						break;
 					}
+			}
+			inline void SetCurrent(size_t id)
+			{
+				m_cur = id;
 			}
 			inline void SetCurrent(std::string obj, std::string name)
 			{
@@ -375,12 +396,8 @@ namespace ag
 				m_cur = id;
 			}
 
-			inline ByteCode Get(std::string name, std::string obj = "")
+			inline ByteCode Get(size_t i)
 			{
-				size_t i = 0;
-				for (; i < m_funcs.size(); i++)
-					if (m_funcs[i].Name == name && m_funcs[i].Object == obj) break;
-
 				m_code[i].Write(m_lengthAddr[i],
 					BitConverter::GetUInt32(
 						m_code[i].Count() - (m_lengthAddr[i] + sizeof(uint32_t))
@@ -395,6 +412,14 @@ namespace ag
 					);
 
 				return m_code[i];
+			}
+			inline ByteCode Get(const std::string& name, const std::string& obj)
+			{
+				size_t i = 0;
+				for (; i < m_funcs.size(); i++)
+					if (m_funcs[i].Name == name && m_funcs[i].Object == obj) break;
+
+				return Get(i);
 			}
 			inline std::vector<ag::FunctionData>& GetData() { return m_funcs; }
 
@@ -885,7 +910,7 @@ namespace ag
 					continue;
 
 				bret.Write(funcStartAddr[curFunc], BitConverter::GetUInt32(bret.Count()));
-				bret.Add(Function.Get(funcs[i].Name));
+				bret.Add(Function.Get(i));
 				curFunc++;
 			}
 
@@ -895,6 +920,7 @@ namespace ag
 				for (size_t j = 0; j < m_objMethods[i].size(); j++) {
 					bret.Write(methodStartAddr[curMethod], BitConverter::GetUInt32(bret.Count()));
 					bret.Add(Function.Get(m_objMethods[i][j].Name, m_objMethods[i][j].Object));
+					// TODO: method overloading
 					curMethod++;
 				}
 			}
