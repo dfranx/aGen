@@ -810,6 +810,17 @@ namespace ag
 				return m_locals[m_cur] + 1 + m_funcs[m_cur].Arguments;
 			}
 
+			inline void Reset()
+			{
+				m_cur = 0;
+				m_locals.clear();
+				m_lengthAddr.clear();
+				m_linkAddr.clear();
+				m_code.clear();
+				m_funcs.clear();
+				m_initializedMethods.clear();
+			}
+
 		private:
 			Generator * m_gen;
 			size_t m_cur;
@@ -820,6 +831,17 @@ namespace ag
 			std::vector<FunctionData> m_funcs;
 			std::vector<std::pair<std::string, std::string>> m_initializedMethods;
 		} Function;
+
+		inline void Reset()
+		{
+			Function.Reset();
+			m_strtbl.clear();
+			m_globals.clear();
+			m_objNames.clear();
+			m_objProps.clear();
+			m_objMethods.clear();
+			m_consts.clear();
+		}
 
 		inline ByteCode Get()
 		{
