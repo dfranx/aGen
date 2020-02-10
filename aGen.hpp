@@ -573,7 +573,7 @@ namespace ag
 			}
 			inline void SetLocal(uint16_t loc_id)
 			{
-				m_locals[m_cur] = std::max(m_locals[m_cur], loc_id);
+				m_locals[m_cur] = std::max<uint16_t>(m_locals[m_cur], loc_id);
 
 				m_code[m_cur].Add(OpCode::SetLocal);
 				m_code[m_cur].Add(BitConverter::GetUInt16(loc_id + m_funcs[m_cur].Arguments));
