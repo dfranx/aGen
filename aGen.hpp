@@ -239,6 +239,7 @@ namespace ag
 		}
 		inline uint16_t GetVersionMinor() { return m_ver_minor; }
 		inline uint8_t GetVersionMajor() { return m_ver_major; }
+		inline const std::vector<std::string>& GetStringTable() { return m_strtbl; }
 		inline size_t AddGlobal(std::string name)
 		{
 			m_globals.push_back(name);
